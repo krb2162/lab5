@@ -34,10 +34,12 @@ def has_cycles(graph: PrecedenceGraph) -> bool:
         print(visited)
         # TODO 1: check if the node is in the recursion stack or
         # has already been visited and return accordingly (4 lines)
+
         if(transaction_id in rec_stack):
             return True
-        
+
         if(transaction_id in visited):
+            print("already visited!")
             return False
 
         # TODO 2: Mark the node as visited and add it to the recursion stack
@@ -51,7 +53,8 @@ def has_cycles(graph: PrecedenceGraph) -> bool:
             # print(neighbor)
             # print(type(neighbor))
             # print(neighbor.id)
-            return _has_cycles_util(neighbor.id)
+            if(_has_cycles_util(neighbor.id)):
+                return True
 
         # TODO 4: Remove the node from the recursion stack (1 line)
         rec_stack.remove(transaction_id)
@@ -151,8 +154,8 @@ def find_all_topological_sorts(pg: PrecedenceGraph) -> List[List[str]]:
             if (proceed):  # Replace True with the correct condition
                 # TODO 3: Visit the node and add it to the topological sort
                 # stack (2 lines)
-                visited.add(node) # actually id
-                stack.append(node) # actually id
+                visited.add(node.id) # actually id
+                stack.append(node.id) # actually id
 
                 # TODO 4: Decrement in-degrees of successors
                 # (2 lines)
@@ -161,7 +164,7 @@ def find_all_topological_sorts(pg: PrecedenceGraph) -> List[List[str]]:
 
                 # TODO 6: Backtrack: un-visit the node and restore in-degrees
                 # of successors (4 lines)
-                visited.remove(node) # actually id
+                visited.remove(node.id) # actually id
                 # restore in-degrees of successors
                 pass
 

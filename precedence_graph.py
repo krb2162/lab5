@@ -223,12 +223,16 @@ if __name__ == "__main__":
 # {Node(T1)}
 # {Node(T3), Node(T1)}
 
-    # graphsched = PrecedenceGraph(schedule)
+    graphsched = PrecedenceGraph(schedule)
     graph = PrecedenceGraph(cycle_schedule)
     no_cycle_graph = PrecedenceGraph(no_cycle)
     print('--------')
+    # print(graphsched)
+    # print(pu.has_cycles(graphsched))
     # print(graph)
     # print(pu.has_cycles(graph))
+    # print(no_cycle)
     # print(pu.has_cycles(no_cycle_graph))
+
 
     
