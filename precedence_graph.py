@@ -233,6 +233,7 @@ if __name__ == "__main__":
     # print(pu.has_cycles(graph))
     # print(no_cycle)
     # print(pu.has_cycles(no_cycle_graph))
+    # print(pu.find_all_topological_sorts(graphsched))
 
 
     
