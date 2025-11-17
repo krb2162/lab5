@@ -213,9 +213,22 @@ if __name__ == "__main__":
                 [None, operation2wd, operation3re, operation4wh, operation5rc],
                 [None, operation2rd, operation3we, None, operation5wc],
                 [operation1rg, operation2wd, None, operation4rf, operation5rc]]
-    graph = PrecedenceGraph(schedule)
+    cycle_schedule = [[operation1wa, None],
+                      [None, operation3ra],
+                      [operation3wb, operation1wa]]
+    no_cycle = [[operation1wa, operation2rd],
+                [operation3ra, operation4rf]]
+    
+#     {Node(T3), Node(T2)}
+# {Node(T1)}
+# {Node(T3), Node(T1)}
+
+    # graphsched = PrecedenceGraph(schedule)
+    graph = PrecedenceGraph(cycle_schedule)
+    no_cycle_graph = PrecedenceGraph(no_cycle)
     print('--------')
-    print(graph)
+    # print(graph)
     # print(pu.has_cycles(graph))
+    # print(pu.has_cycles(no_cycle_graph))
 
     

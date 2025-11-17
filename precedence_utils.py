@@ -28,6 +28,10 @@ def has_cycles(graph: PrecedenceGraph) -> bool:
         TODO: Implement this helper function to check if the graph has cycles
         by completing the following steps.
         """
+        print("utils:")
+        print(transaction_id)
+        print(rec_stack)
+        print(visited)
         # TODO 1: check if the node is in the recursion stack or
         # has already been visited and return accordingly (4 lines)
         if(transaction_id in rec_stack):
@@ -47,7 +51,7 @@ def has_cycles(graph: PrecedenceGraph) -> bool:
             # print(neighbor)
             # print(type(neighbor))
             # print(neighbor.id)
-            _has_cycles_util(neighbor.id)
+            return _has_cycles_util(neighbor.id)
 
         # TODO 4: Remove the node from the recursion stack (1 line)
         rec_stack.remove(transaction_id)
