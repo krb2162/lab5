@@ -30,39 +30,35 @@ def has_cycles(graph: PrecedenceGraph) -> bool:
         """
         # TODO 1: check if the node is in the recursion stack or
         # has already been visited and return accordingly (4 lines)
-        print("katie starts ")
-        # if(transaction_id in rec_stack or transaction_id in visited):
-        #     print("cycle detected")
-        # if(transaction_id in rec_stack or transaction_id in visited):
-            # return True
+        if(transaction_id in rec_stack):
+            return True
+        
+        if(transaction_id in visited):
+            return False
 
         # TODO 2: Mark the node as visited and add it to the recursion stack
         # Mark the node as visited and add it to the recursion stack (2 lines)
-        # visited.add(transaction_id)
-        # visited.add(transaction_id)
-        # rec_stack.add(transaction_id)
+        visited.add(transaction_id)
+        rec_stack.add(transaction_id)
 
         # TODO 3: Recursively check all neighbours for cycles (~3 lines)
-        # print(graph.nodes[transaction_id])
-        # print("edges")
-        # print(graph.nodes[transaction_id].edges)
-        # print(graph.nodes[transaction_id].edges)
-        # for node in graph.nodes[transaction_id].edges:
-        #     print("hi from neighbor:")
-        #     print(node)
-        #     return _has_cycles_util(node[transaction_id])
-        # FIXME!!!!
+        print(graph.nodes[transaction_id].edges)
+        for neighbor in graph.nodes[transaction_id].edges:
+            # print(neighbor)
+            # print(type(neighbor))
+            # print(neighbor.id)
+            _has_cycles_util(neighbor.id)
 
         # TODO 4: Remove the node from the recursion stack (1 line)
-        # rec_stack.remove(transaction_id)
+        rec_stack.remove(transaction_id)
 
         # TODO 5: Return no cycle found
         return False
 
     # Check for cycles in all nodes
-    # for tx_id in graph.nodes:
-    #     if _has_cycles_util(tx_id):
-    #         return True
+    for tx_id in graph.nodes:
+        if _has_cycles_util(tx_id):
+            return True
 
     return False
 
@@ -118,15 +114,41 @@ def find_all_topological_sorts(pg: PrecedenceGraph) -> List[List[str]]:
         graph by completing the following steps.
         """
         # TODO 1: Check if all nodes are visited; if so, record the current
-        # order by adding a COPY of the stack to all_orders and return
+        # order by adding a COPY of the stack to all_orders and return]
+        not_all_visited = False
+        for node in nodes:
+            if(node not in visited):
+                not_all_visited = True
+        if(not not_all_visited):
+            all_orders.append(stack.copy())
+            return
 
         # Iterate over all nodes
         for tx, node in nodes.items():
             # TODO 2: Proceed only if node is unvisited and has no
             # incoming edges from unvisited nodes
-            if True:  # Replace True with the correct condition
+            proceed = True
+            if(node in visited):
+                proceed = False
+            # FIXME
+            # does node.edges show incoming or outgoing edges? set of destination nodes
+            # so we want to find nodes that are unvisited and then see if in their edges if this node is in it
+            # to find all unvisited nodes we can do nodes - visisted? 
+            unvisited = []
+            for n in nodes:
+                if n not in visited:
+                    unvisited.append(n)
+
+            for unvisited_node in unvisited:
+                for e in unvisited_node.edges:
+                    if(e == tx):
+                        proceed = False
+
+            if (proceed):  # Replace True with the correct condition
                 # TODO 3: Visit the node and add it to the topological sort
                 # stack (2 lines)
+                visited.add(node) # actually id
+                stack.append(node) # actually id
 
                 # TODO 4: Decrement in-degrees of successors
                 # (2 lines)
@@ -135,6 +157,8 @@ def find_all_topological_sorts(pg: PrecedenceGraph) -> List[List[str]]:
 
                 # TODO 6: Backtrack: un-visit the node and restore in-degrees
                 # of successors (4 lines)
+                visited.remove(node) # actually id
+                # restore in-degrees of successors
                 pass
 
     _all_topological_sorts_util(visited, stack, all_orders)

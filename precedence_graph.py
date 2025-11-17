@@ -1,3 +1,4 @@
+# import precedence_utils as pu
 """
 Author: Rami Pellumbi
 
@@ -95,6 +96,9 @@ class PrecedenceGraph:
 
         # TODO: Implement this function to check if two operations conflict
         # Hint: compute three boolean values and return their conjunction
+        if operation1.transaction == operation2.transaction:
+            return False
+
         operation_type_1 = operation1[1]
         item_1 = operation1[2]
 
@@ -133,9 +137,10 @@ class PrecedenceGraph:
         # basically turn the matrix into a flat list
         # iterate through the matrix by row, and they can go in any order? 
         operations = []
-        for i in range(len(schedule)):
-            for j in range(len(schedule[0])): 
-                operations.append(schedule[i][j])
+        for step in schedule:
+            for operation in step:
+                if (operation != None):
+                    operations.append(operation)
 
         # TODO: Step 2: add edges between nodes that have conflicts
         # An edge from node T1 to node T2 means that T1 must come before T2
@@ -143,16 +148,12 @@ class PrecedenceGraph:
         # Hint 2: add an edge from the source node to the destination node
         # ~8 lines of code
 
-        for i in range(0, len(schedule)-1):
-            for j in range(i+1, len(schedule)):
-                # if(self._has_conflict(operations[i], operations[j]))
+        for i in range(0, len(operations)-1):
+            for j in range(i+1, len(operations)):
                 if(self._has_conflict(operation1=operations[i], operation2=operations[j])):
-                    node1 = Node(operations[i])
-                    node2 = Node(operations[j])
-                    # FIXME: make sure you find it in the graph? reuse node or can be new node?
-                    # is there already source node? 
-                    # what do i return ?
-                    node1.add_edge(node2)
+                    source = self._nodes[operations[i].transaction]
+                    destination = self._nodes[operations[j].transaction]
+                    source.add_edge(destination)
 
     def __repr__(self) -> str:
         rep = ""
@@ -175,9 +176,46 @@ class PrecedenceGraph:
         return self._nodes
 
 if __name__ == "__main__":
-    operation1 = Operation(transaction="T1", type="read", item="A")
-    operation2 = Operation(transaction="T2", type="write", item="A")
-    operation3 = Operation(transaction="T3", type="read", item="B")
-    schedule = [[operation1, operation2],[operation2, operation1],[operation3, None]]
+    operation1ra = Operation(transaction="T1", type="read", item="A")
+    operation1wa = Operation(transaction="T1", type="write", item="A")
+    operation1rc = Operation(transaction="T1", type="read", item="C")
+    operation1wc = Operation(transaction="T1", type="write", item="C")
+    operation1rg = Operation(transaction="T1", type="read", item="G")
+
+    operation2wh = Operation(transaction="T2", type="write", item="H")
+    operation2rh = Operation(transaction="T2", type="read", item="H")
+    operation2rd = Operation(transaction="T2", type="read", item="D")
+    operation2wd = Operation(transaction="T2", type="write", item="D")
+
+    operation3rb = Operation(transaction="T3", type="read", item="B")
+    operation3wb = Operation(transaction="T3", type="write", item="B")
+    operation3ra = Operation(transaction="T3", type="read", item="A")
+    operation3re = Operation(transaction="T3", type="read", item="E")
+    operation3we = Operation(transaction="T3", type="write", item="E")
+
+    operation4re = Operation(transaction="T4", type="read", item="E")
+    operation4we = Operation(transaction="T4", type="write", item="E")
+    operation4rg = Operation(transaction="T4", type="read", item="G")
+    operation4rh = Operation(transaction="T4", type="read", item="H")
+    operation4wh = Operation(transaction="T4", type="write", item="H")
+    operation4rf = Operation(transaction="T4", type="read", item="F")
+
+    operation5rf = Operation(transaction="T5", type="read", item="F")
+    operation5wf = Operation(transaction="T5", type="write", item="F")
+    operation5rc = Operation(transaction="T5", type="read", item="C")
+    operation5wc = Operation(transaction="T5", type="write", item="C")
+
+    schedule = [[operation1ra, None, operation3rb, operation4re, operation5rf],
+                [operation1wa, operation2rh, operation3wb, operation4we, operation5wf],
+                [None, operation2wh, operation3ra, operation4rg, operation5rf],
+                [operation1rc, None, operation3ra, operation4rh, operation5wf],
+                [operation1wc, operation2rd, operation3ra, operation4rh, None],
+                [None, operation2wd, operation3re, operation4wh, operation5rc],
+                [None, operation2rd, operation3we, None, operation5wc],
+                [operation1rg, operation2wd, None, operation4rf, operation5rc]]
     graph = PrecedenceGraph(schedule)
+    print('--------')
+    print(graph)
+    # print(pu.has_cycles(graph))
+
     
